@@ -1,0 +1,4 @@
+Make both container runned at the same time using docker compose offered my gemini - https://g.co/gemini/share/4c39f1eac9f5
+TODO: It works but we need to configure docker with the nvidia and we need to do that under WSL, we can't with windows..
+
+(Transfer) all files in a linux system now
