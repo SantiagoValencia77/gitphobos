@@ -1,6 +1,0 @@
-pandas
-numpy
-requests
-gradio
-matplotlib
-tqdm
