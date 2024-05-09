@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  phobos:   # User-facing application
+    image: stellar888/phobos:latest  # Use the built image for your front-end app
+    ports:
+      - "5000:5000"  # Expose port 5000 on the host to port 5000 within the container
+    depends_on:
+      - phobosback-llm  # Wait until the LLM service is ready before starting
+
+    # #entrypoint: >
+    #   bash -c "apt-get update && apt-get install -y netcat && \
+    #     while ! nc -z phobosback-llm 8000; do sleep 1; done && \
+    #     python app.py"
+    entrypoint: >   # (Optional) Customize the startup behavior of the front-end app
+      bash -c "commands to start your front-end application"
+    runtime: nvidia  # (Optional) If your front-end app needs GPU access
+    devices:
+      - "/dev/nvidia*:/dev/nvidia*"  # (Optional) Mount NVIDIA devices if needed
+
+  phobosback-llm:  # Background LLM service
+    image: stellar888/llm:latest  # Use the built image for your LLM model
+    ports:
+      - "8000:8000"  # (Optional) Expose port 8000 within the container (if needed)
+    runtime: nvidia  # Use NVIDIA runtime for GPU access
+    devices:
+      - "/dev/nvidia*:/dev/nvidia*"  # Mount NVIDIA devices for the LLM model
