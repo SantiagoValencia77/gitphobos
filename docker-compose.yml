@@ -8,10 +8,6 @@ services:
     depends_on:
       - phobosback-llm  # Wait until the LLM service is ready before starting
 
-    # #entrypoint: >
-    #   bash -c "apt-get update && apt-get install -y netcat && \
-    #     while ! nc -z phobosback-llm 8000; do sleep 1; done && \
-    #     python app.py"
     entrypoint: >   # (Optional) Customize the startup behavior of the front-end app
       bash -c "commands to start your front-end application"
     runtime: nvidia  # (Optional) If your front-end app needs GPU access
@@ -25,3 +21,8 @@ services:
     runtime: nvidia  # Use NVIDIA runtime for GPU access
     devices:
       - "/dev/nvidia*:/dev/nvidia*"  # Mount NVIDIA devices for the LLM model
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]  # Replace with your health endpoint if needed
+      interval: 10s  # Check every 10 seconds
+      timeout: 5s  # Fail if no response within 5 seconds
+      retries: 3  # Retry 3 times before considering unhealthy

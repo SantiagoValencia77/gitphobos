@@ -13,15 +13,25 @@ jobs:
       - name: Login to Docker Hub (optional)  # Only if pushing to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}  # Remove this line (if using access token)
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Remove this line (if using access token)
+          token: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       - name: Build Docker image
         run: docker-compose build  # Uses docker-compose.yml to build image
 
-      # Additional steps (optional)
-      - name: Push Docker image to Docker Hub (optional)
-        run: docker push <your_username>/<your_image_name>
+      # Start services in the background
+      - name: Start services
+        run: docker-compose up -d
 
+      - name: Get Docker Username from Secret
+        run: echo "USERNAME=$(echo ${{ secrets.DOCKER_USERNAME }})" >> $GITHUB_ENV
+
+
+      # Additional steps (optional)
+      - name: Push phobos image to Docker Hub (optional)
+        run: docker push $DOCKER_USERNAME/phobos:latest
+      - name: Push llm image to Docker Hub (optional)
+        run: docker push $DOCKER_USERNAME/llm:latest
       - name: Deploy to Hugging Face Spaces
         # Specific steps for deployment to Hugging Face Spaces will depend on their platform
         # Refer to Hugging Face documentation for details on deployment steps
