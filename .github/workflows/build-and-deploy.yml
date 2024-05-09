@@ -26,13 +26,14 @@ jobs:
       - name: Get Docker Username from Secret
         run: echo "USERNAME=$(echo ${{ secrets.DOCKER_USERNAME }})" >> $GITHUB_ENV
 
-
       # Additional steps (optional)
       - name: Push phobos image to Docker Hub (optional)
         run: docker push $DOCKER_USERNAME/phobos:latest
-      - name: Push llm image to Docker Hub (optional)
-        run: docker push $DOCKER_USERNAME/llm:latest
-      - name: Deploy to Hugging Face Spaces
-        # Specific steps for deployment to Hugging Face Spaces will depend on their platform
-        # Refer to Hugging Face documentation for details on deployment steps
 
+      # Install Hugging Face CLI (only needed for deployment to Hugging Face Spaces)
+      - name: Install Hugging Face CLI
+        run: pip install huggingface_hub
+
+      # Deploy to Hugging Face Spaces
+      - name: Deploy to Hugging Face Spaces
+        run: hf spaces upload $DOCKER_USERNAME/phobos:latest --env production
