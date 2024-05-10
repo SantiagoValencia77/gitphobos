@@ -29,6 +29,8 @@ jobs:
       # Additional steps (optional)
       - name: Push phobos image to Docker Hub (optional)
         run: docker push $DOCKER_USERNAME/phobos:latest
+      - name: Push llm image to Docker Hub (optional)
+        run: docker push $DOCKER_USERNAME/llm:latest
 
       # Install Hugging Face CLI (only needed for deployment to Hugging Face Spaces)
       - name: Install Hugging Face CLI
